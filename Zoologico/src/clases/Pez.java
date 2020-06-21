@@ -2,7 +2,7 @@ package clases;
 import zoo.*;
 
 public class Pez extends Animal{
-    
+
     public Pez(){
         super();
     }
@@ -10,7 +10,7 @@ public class Pez extends Animal{
         super(n, e, a, t);
     }
     public String toString(){
-        return "Tipo: Pez" + super.toString() + "\tComportamiento: " + getComportamiento();
+        return "\tTipo: Pez" + super.toString() + "\tComportamiento: " + getComportamiento();
     }
     @Override
     public void mostrar() {

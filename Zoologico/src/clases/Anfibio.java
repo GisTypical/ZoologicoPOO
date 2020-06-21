@@ -11,7 +11,7 @@ public class Anfibio extends Animal {
     }
 
     public String toString(){
-        return "Tipo: Anfibio" + super.toString() + "\tComportamiento: " + super.getComportamiento(); 
+        return "\tTipo: Anfibio" + super.toString() + "\tComportamiento: " + super.getComportamiento(); 
     }
 
     @Override
