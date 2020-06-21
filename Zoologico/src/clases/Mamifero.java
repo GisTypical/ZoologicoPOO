@@ -11,7 +11,7 @@ public class Mamifero extends Animal{
     }
     
     public String toString(){
-        return "Tipo: Mamifero" + super.toString() + "\tComportamiento: " + super.getComportamiento();
+        return "\tTipo: Mamifero" + super.toString() + "\tComportamiento: " + super.getComportamiento();
     }
 
     @Override

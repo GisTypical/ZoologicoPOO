@@ -1,5 +1,7 @@
 package zoo;
 
+import java.util.Scanner;
+
 import interfaces.AnimalComportamiento;
 
 public abstract class Animal implements AnimalComportamiento{
@@ -8,6 +10,8 @@ public abstract class Animal implements AnimalComportamiento{
     public String alimentacion;
     public String conducta;
     public int total;
+
+    Scanner scanear = new Scanner(System.in); 
 
     //---------Constructores---------
     public Animal(){
@@ -53,6 +57,7 @@ public abstract class Animal implements AnimalComportamiento{
         return total;
     }
 
+    // Metodos Interfaz
     public void setComportamiento(String c){
         this.conducta = c;
     }

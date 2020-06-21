@@ -11,7 +11,7 @@ public class Ave extends Animal{
     }
 
     public String toString(){
-        return "Tipo: Ave" + super.toString() + "\tComportamiento: " +super.getComportamiento();
+        return "\tTipo: Ave" + super.toString() + "\tComportamiento: " +super.getComportamiento();
     }
 
     @Override

@@ -3,7 +3,7 @@ package clases;
 import zoo.Animal;
 
 public class Reptil extends Animal {
-    
+
     public Reptil() {
         super();
     }
@@ -13,7 +13,7 @@ public class Reptil extends Animal {
     }
     
     public String toString(){
-        return "Tipo: Reptil" + super.toString() + "\tComportamiento: " + super.getComportamiento();
+        return "\tTipo: Reptil" + super.toString() + "\tComportamiento: " + super.getComportamiento();
     }
 
     @Override
