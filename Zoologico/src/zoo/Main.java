@@ -86,7 +86,7 @@ public class Main {
         do {
             System.out.println("-------Zoologico-------");
             System.out.println("1. Mostrar lista mamiferos\n2. Mostrar lista aves\n3. Mostrar lista reptiles\n4. Mostrar lista anfibios\n5. Mostrar lista de peces");
-            System.out.println("6. Agregar un nuevo animal\n0. Salir");
+            System.out.print("6. Agregar un nuevo animal\n0. Salir\nSeleccion: ");
             key = scanear.nextInt();
             switch (key) {
                 case 1:
@@ -116,7 +116,7 @@ public class Main {
                     usuarioComportamiento = scanear.nextLine();
                     System.out.print("Total en el Zoo: ");
                     usuarioTotal = scanear.nextInt();
-                    System.out.println("\nEste animal pertenece a: \n1. Mamiferos\n2. Aves\n3. Reptiles\n4. Anfibios\n5. Peces");
+                    System.out.print("\nEste animal pertenece a: \n1. Mamiferos\n2. Aves\n3. Reptiles\n4. Anfibios\n5. Peces\nSeleccion: ");
                     key = scanear.nextInt();
                     switch (key) {
                         case 1:
@@ -158,5 +158,6 @@ public class Main {
                     break;
             }
         } while (key != 0);
+        scanear.close();
     }
 }
