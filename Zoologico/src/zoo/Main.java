@@ -87,7 +87,7 @@ public class Main {
             System.out.println("-------Zoologico-------");
             System.out.println("1. Mostrar lista mamiferos\n2. Mostrar lista aves\n3. Mostrar lista reptiles\n4. Mostrar lista anfibios\n5. Mostrar lista de peces");
             System.out.println("6. Agregar un nuevo animal\n0. Salir");
-            key = scanear.nextInt(); 
+            key = scanear.nextInt();
             switch (key) {
                 case 1:
                     System.out.println(mamiferos);
@@ -105,15 +105,15 @@ public class Main {
                     System.out.println(peces);
                     break;
                 case 6:
-                    Scanner usuarioScanear = new Scanner(System.in);
                     System.out.print("Nombre: ");
-                    usuarioNombre = usuarioScanear.nextLine();
+                    usuarioNombre = scanear.nextLine();
+                    usuarioNombre += scanear.nextLine();
                     System.out.print("Especie: ");
-                    usuarioEspecie = usuarioScanear.nextLine();
+                    usuarioEspecie = scanear.nextLine();
                     System.out.print("Alimento: ");
-                    usuarioAlimento = usuarioScanear.nextLine();
+                    usuarioAlimento = scanear.nextLine();
                     System.out.print("Comportamiento: ");
-                    usuarioComportamiento = usuarioScanear.nextLine();
+                    usuarioComportamiento = scanear.nextLine();
                     System.out.print("Total en el Zoo: ");
                     usuarioTotal = scanear.nextInt();
                     System.out.println("\nEste animal pertenece a: \n1. Mamiferos\n2. Aves\n3. Reptiles\n4. Anfibios\n5. Peces");
@@ -158,6 +158,5 @@ public class Main {
                     break;
             }
         } while (key != 0);
-        scanear.close();
     }
 }
