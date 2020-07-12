@@ -6,95 +6,30 @@ import javax.swing.border.*;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
-
-import clases.*;
+import java.sql.*;
 
 public class UI {
-    public static ArrayList<Mamifero> mamiferos;
-    public static ArrayList<Anfibio> anfibios;
-    public static ArrayList<Pez> peces;
-    public static ArrayList<Reptil> reptiles;
-    public static ArrayList<Ave> aves;
+    //Parametros de Conexion a base de datos
+    private Connection conn;
+    private PreparedStatement pstmt;
+    private String driverDB = "org.postgresql.Driver";
+    private String dbName = "zoo";
+    private String urlDB = "jdbc:postgresql://localhost:5432/" + this.dbName;
+    private String userDB = "postgres";
+    private String passDB = "123";
+
     public static JFrame view;
-    private JLabel confirmacion;
     private static JPanel panelGod, panel1, panel2, panel3;
     private Border border;
     private JTextField textFieldN, textFieldE, textFieldA, textFieldC, textFieldT;
-    private JButton b1, b2;
+    public static JLabel confirmacion;
+    private JButton b1;
+	private JButton b2;
     private GridBagConstraints cns = new GridBagConstraints();
-	private int key;
-
+    private int key = 1;
+    
     public UI(){
-
-        Pez p1 = new Pez("Pez Payaso", "A. chagosensis", "Herbivoro", 10);
-        p1.setComportamiento("Nadar\n");
-
-        Pez p2 = new Pez("Pez Espada", "X. gladius", "Carnivoro", 5);
-        p2.setComportamiento("Nadar\n");
-
-        Pez p3 = new Pez("Tiburon Blanco", "C. carcharias", "Carnivoro", 2);
-        p3.setComportamiento("Cazar\n");
-
-        Mamifero m1 = new Mamifero("Guepardo", "A. jubatus", "Carnivoro", 3);
-        m1.setComportamiento("Correr\n");
-
-        Mamifero m2 = new Mamifero("Oso Pardo", "U. arctos", "Omnivoro", 4);
-        m2.setComportamiento("Cazar\n");
-
-        Mamifero m3 = new Mamifero("Elefante", "L. cyclotis", "Herbivoro", 3);
-        m3.setComportamiento("Caminar\n");
-
-        Ave a1 = new Ave("Pinguino Rey", "A. patagonicus", "Carnivoro", 6);
-        a1.setComportamiento("Nadar\n");
-
-        Ave a2 = new Ave("avestruz", "S. camelus", "Herbivoro", 4);
-        a2.setComportamiento("Correr\n");
-
-        Ave a3 = new Ave("Pavo Real", "P. cristatus", "Herbivoro", 1);
-        a3.setComportamiento("Caminar\n");
-
-        Reptil r1 = new Reptil("Cocodrilo", "C. crocodilus", "Carnivoro", 2);
-        r1.setComportamiento("Caminar y Nadar\n");
-
-        Reptil r2 = new Reptil("Morrocoy", "C. carbonaria", "Herbivora", 6);
-        r2.setComportamiento("Caminar\n");
-
-        Reptil r3 = new Reptil("Camaleon", "C. chamaeleon", "Insectivoro", 9);
-        r3.setComportamiento("Camuflajear\n");
-
-        Anfibio an1 = new Anfibio("Sapo Comun", "B. bufo", "Insectivoro", 14);
-        an1.setComportamiento("Saltar\n");
-
-        Anfibio an2 = new Anfibio("Rana Dorada", "P. terribilis", "Insectivoro", 1);
-        an2.setComportamiento("Envenenar\n");
-
-        Anfibio an3 = new Anfibio("Cecilias", "P. terribilis", "Insectivoro", 7);
-        an3.setComportamiento("Arrastrar\n");
-
-        //Creacion de Arraylists
-        mamiferos = new ArrayList<Mamifero>();
-        anfibios = new ArrayList<Anfibio>();
-        peces = new ArrayList<Pez>();
-        reptiles = new ArrayList<Reptil>();
-        aves = new ArrayList<Ave>();
-
-        //Agregar a los Arraylists
-        mamiferos.add(m1);
-        mamiferos.add(m2);
-        mamiferos.add(m3);
-        anfibios.add(an1);
-        anfibios.add(an2);
-        anfibios.add(an3);
-        peces.add(p1);
-        peces.add(p2);
-        peces.add(p3);
-        reptiles.add(r1);
-        reptiles.add(r2);
-        reptiles.add(r3);
-        aves.add(a1);
-        aves.add(a2);
-        aves.add(a3);
+        DB();
         border = BorderFactory.createEtchedBorder(EtchedBorder.LOWERED);
         UI.view = new JFrame("Zoologico OS v2");
         UI.panelGod = new JPanel();
@@ -102,36 +37,41 @@ public class UI {
         Paneles();
         UI.view.add(panelGod); 
 
-        UI.view.setBounds(500, 250, 450, 275);
+        UI.view.setBounds(500, 250, 500, 275);
         UI.view.setVisible(true);
         UI.view.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         UI.view.setResizable(false);
     }
 
     public void Paneles(){
-        
+
+        //PANEL 1
+
         UI.panel1 = new JPanel();
         UI.panel1.setLayout(new BoxLayout(panel1, BoxLayout.PAGE_AXIS));
-        TitledBorder titleBorderL = BorderFactory.createTitledBorder(border,"«Datos Animal»");
+        TitledBorder titleBorderL = BorderFactory.createTitledBorder(border,"(Datos Animal)");
         titleBorderL.setTitleJustification(TitledBorder.CENTER);
         UI.panel1.setBorder(titleBorderL);
+        
         //Instanciar los Labels y los TextFields
         UI.panel1.add(new JLabel("Nombre:")); this.textFieldN = new JTextField(); UI.panel1.add(textFieldN);
         UI.panel1.add(new JLabel("Especie:")); this.textFieldE = new JTextField(); UI.panel1.add(textFieldE); 
         UI.panel1.add(new JLabel("Total de animales:")); this.textFieldT = new JTextField(); UI.panel1.add(textFieldT);
-        UI.panel1.add(new JLabel("Alimentación:")); this.textFieldA = new JTextField(); UI.panel1.add(textFieldA); 
+        UI.panel1.add(new JLabel("Alimentacion:")); this.textFieldA = new JTextField(); UI.panel1.add(textFieldA); 
         UI.panel1.add(new JLabel("Comportamiento:")); this.textFieldC = new JTextField(); UI.panel1.add(textFieldC);
         cns.gridx = 0; cns.gridy = 0; cns.gridwidth = 1; cns.gridheight = 2; cns.weightx = 1.0; cns.weighty = 1.0; cns.fill = GridBagConstraints.BOTH;
         UI.panelGod.add(panel1, cns);
         
+        //PANEL 2
+
         UI.panel2 = new JPanel();
         UI.panel2.setLayout(new BoxLayout(panel2, BoxLayout.PAGE_AXIS));
-        TitledBorder titleBorderUR = BorderFactory.createTitledBorder(border,"«Tipo Animal»");
+        TitledBorder titleBorderUR = BorderFactory.createTitledBorder(border,"(Tipo Animal)");
         titleBorderUR.setTitleJustification(TitledBorder.CENTER);
         UI.panel2.setBorder(titleBorderUR);
         ButtonGroup group = new ButtonGroup();
         //Instanciar los JRadioButton
-        JRadioButton radioMamifero = new JRadioButton("Mamifero");
+        JRadioButton radioMamifero = new JRadioButton("Mamifero", true);
         JRadioButton radioReptil = new JRadioButton("Reptil");
         JRadioButton radioAve = new JRadioButton("Ave");
         JRadioButton radioAnfibio = new JRadioButton("Anfibio");
@@ -151,86 +91,76 @@ public class UI {
         //Añadir acciones a los RadioButtons
         radioMamifero.addActionListener(new ActionListener(){
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent event) {
 				key = 1;
             }
         });
         radioReptil.addActionListener(new ActionListener(){
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent event) {
 				key = 2;
             }
         });
         radioAve.addActionListener(new ActionListener(){
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent event) {
 				key = 3;
             }
         });
         radioAnfibio.addActionListener(new ActionListener(){
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent event) {
 				key = 4;
             }
         });
         radioPez.addActionListener(new ActionListener(){
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent event) {
 				key = 5;
             }
         });
-        confirmacion = new JLabel("Insertado!");
-        this.confirmacion.setVisible(false);
-        UI.panel2.add(this.confirmacion);
+        UI.confirmacion = new JLabel();
+        UI.confirmacion.setVisible(false);
+        UI.panel2.add(UI.confirmacion);
         cns.gridx = 1; cns.gridy = 0; cns.gridwidth = 1; cns.gridheight = 1; cns.weightx = 1.0; cns.weighty = 1.0; cns.fill = GridBagConstraints.BOTH;
         UI.panelGod.add(panel2, cns);
+
+        //PANEL 3
+
         UI.panel3 = new JPanel();
         UI.panel3.setLayout(new BorderLayout());
         this.b1 = new JButton("Insertar animal");
         this.b1.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent e){
+            public void actionPerformed(ActionEvent event){
                 String nombre = textFieldN.getText();
                 String especie = textFieldE.getText();
-                String total = textFieldT.getText();
                 String alimentacion = textFieldA.getText();
-                int totalInt = Integer.parseInt(total);
+                int totalInt = Integer.parseInt(textFieldT.getText());
                 String comportamiento = textFieldC.getText();
+                Object[] obj = {nombre, especie, alimentacion, totalInt, comportamiento};
                 switch (key) {
                     case 1:
-                        Mamifero mamiferoUsuario = new Mamifero(nombre, especie, alimentacion, totalInt);
-                        mamiferoUsuario.setComportamiento(comportamiento);
-                        mamiferos.add(mamiferoUsuario);
+                        dbPrepareStmtAdd("insert into mamiferos values (?,?,?,?,?)", obj);
                         break;
                     case 2:
-                        Reptil reptilUsuario = new Reptil(nombre, especie, alimentacion, totalInt);
-                        reptilUsuario.setComportamiento(comportamiento);
-                        reptiles.add(reptilUsuario);
+                        dbPrepareStmtAdd("insert into reptiles values (?,?,?,?,?)", obj);
                         break;
                     case 3:
-                        Ave aveUsuario = new Ave(nombre, especie, alimentacion, totalInt);
-                        aveUsuario.setComportamiento(comportamiento);
-                        aves.add(aveUsuario);
+                        dbPrepareStmtAdd("insert into aves values (?,?,?,?,?)", obj);
                         break;
                     case 4:
-                        Anfibio anfibioUsuario = new Anfibio(nombre, especie, alimentacion, totalInt);
-                        anfibioUsuario.setComportamiento(comportamiento);
-                        anfibios.add(anfibioUsuario);
+                        dbPrepareStmtAdd("insert into anfibios values (?,?,?,?,?)", obj);
                         break;
                     case 5:
-                        Pez pezUsuario = new Pez(nombre, especie, alimentacion, totalInt);
-                        pezUsuario.setComportamiento(comportamiento);
-                        peces.add(pezUsuario);
+                        dbPrepareStmtAdd("insert into mamiferos values (?,?,?,?,?)", obj);
                         break;
-                    default:
-                        break;
-                }
-                confirmacion.setVisible(true);
+                    }
             }
         });
         UI.panel3.add(b1, BorderLayout.NORTH);
-        this.b2 = new JButton("Ver listas → ");
+        this.b2 = new JButton("Ver listas ->");
         this.b2.addActionListener(new ActionListener(){
-            public void actionPerformed (ActionEvent e){
+            public void actionPerformed (ActionEvent event){
                 new UI2();
                 view.setContentPane(UI2.getJPanel());
                 view.validate();
@@ -241,23 +171,52 @@ public class UI {
         cns.gridx = 1; cns.gridy = 1; cns.gridwidth = 1; cns.gridheight = 1; cns.weightx = 1.0; cns.weighty = 1.0; cns.fill = GridBagConstraints.BOTH;
         UI.panelGod.add(panel3, cns);
     }
+
+    public void DB() { 
+        try {
+            Class.forName(driverDB);
+            this.conn = DriverManager.getConnection(urlDB, userDB, passDB);
+            System.out.println("Conexion establecida");
+        } catch (ClassNotFoundException | SQLException event) {
+            event.printStackTrace();
+        }
+    }
     //Getters
     public static JPanel getJPanel(){
         return panelGod;
     }
-    public static String getListaMamiferos(){
-        return mamiferos.toString();
-    }
-    public static String getListaAnfibios(){
-        return anfibios.toString();
-    }
-    public static String getListaPeces(){
-        return peces.toString();
-    }
-    public static String getListaReptiles(){
-        return reptiles.toString();
-    }
-    public static String getListaAves(){
-        return aves.toString();
+
+    public void dbPrepareStmtAdd(String query, Object[] obj) {
+        try {
+            this.pstmt = this.conn.prepareStatement(query);
+            this.pstmt.setString(1, (String) obj[0]);
+            this.pstmt.setString(2, (String) obj[1]);
+            this.pstmt.setString(3, (String) obj[2]);
+            this.pstmt.setInt(4, (int) obj[3]);
+            this.pstmt.setString(5, (String) obj[4]);
+            this.pstmt.executeUpdate();
+            UI.confirmacion.setText("Insertado!");
+            UI.confirmacion.setForeground(Color.orange);
+            UI.confirmacion.setVisible(true);
+            this.textFieldN.setText(null);
+            this.textFieldE.setText(null);
+            this.textFieldT.setText(null);
+            this.textFieldA.setText(null);
+            this.textFieldC.setText(null);
+        } 
+        catch (SQLException event) {
+            UI.confirmacion.setText("Error: ya existe esa especie");
+            UI.confirmacion.setForeground(Color.red);
+            UI.confirmacion.setVisible(true);
+            event.printStackTrace();
+        } 
+        finally {
+            try {
+                this.pstmt.close();
+            } 
+            catch (SQLException event) {
+                event.printStackTrace();
+            }
+        }
     }
 }

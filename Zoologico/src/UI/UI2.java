@@ -4,52 +4,58 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class UI2{
+public class UI2 {
     public static JPanel panelLista;
     private JButton b1, b2, b3, b4, b5, volver;
 
-    public UI2(){
-        UI2.panelLista = new JPanel(new FlowLayout(FlowLayout.CENTER));
+    public UI2() {
+        UI2.panelLista = new JPanel(new GridLayout(6, 1));
+        UI2.panelLista.setSize(300, 500);
         this.b1 = new JButton("Lista Mamiferos");
-        this.b1.addActionListener(new ActionListener(){
-            public void actionPerformed (ActionEvent e){
-                UI3 terceraV = new UI3(1);
+        this.b1.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                UI3 terceraV;
+                terceraV = new UI3(1);
                 UI.view.setContentPane(terceraV.getJPanel());
                 UI.view.validate();
                 UI.view.invalidate();
             }
         });
-        this.b2 = new JButton("Lista Reptil");
+        this.b2 = new JButton("Lista Reptiles");
         this.b2.addActionListener(new ActionListener(){
             public void actionPerformed (ActionEvent e){
-                UI3 terceraV = new UI3(2);
+                UI3 terceraV;
+                terceraV = new UI3(2);
                 UI.view.setContentPane(terceraV.getJPanel());
                 UI.view.validate();
                 UI.view.invalidate();
             }
         });
-        this.b3 = new JButton("Lista Ave");
+        this.b3 = new JButton("Lista Aves");
         this.b3.addActionListener(new ActionListener(){
             public void actionPerformed (ActionEvent e){
-                UI3 terceraV = new UI3(3);
+                UI3 terceraV;
+                terceraV = new UI3(3);
                 UI.view.setContentPane(terceraV.getJPanel());
                 UI.view.validate();
                 UI.view.invalidate();
             }
         });
-        this.b4 = new JButton("Lista Anfibio");
+        this.b4 = new JButton("Lista Anfibios");
         this.b4.addActionListener(new ActionListener(){
             public void actionPerformed (ActionEvent e){
-                UI3 terceraV = new UI3(4);
+                UI3 terceraV;
+                terceraV = new UI3(4);
                 UI.view.setContentPane(terceraV.getJPanel());
                 UI.view.validate();
                 UI.view.invalidate();
             }
         });
-        this.b5 = new JButton("Lista Pez");
+        this.b5 = new JButton("Lista Peces");
         this.b5.addActionListener(new ActionListener(){
             public void actionPerformed (ActionEvent e){
-                UI3 terceraV = new UI3(5);
+                UI3 terceraV;
+                terceraV = new UI3(5);
                 UI.view.setContentPane(terceraV.getJPanel());
                 UI.view.validate();
                 UI.view.invalidate();
@@ -67,6 +73,7 @@ public class UI2{
                 UI.view.setContentPane(UI.getJPanel());
                 UI.view.validate();
                 UI.view.invalidate();
+                UI.confirmacion.setVisible(false);
             }
         });
         UI2.panelLista.setPreferredSize(new Dimension(100, 100));
