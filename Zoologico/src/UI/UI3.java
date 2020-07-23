@@ -63,7 +63,7 @@ public class UI3 {
         JScrollPane scrollPane = new JScrollPane(tabla);
         this.panelMostrar.add(scrollPane, BorderLayout.CENTER);
         borrar = new JButton("Borrar");
-        //Capturar accion del Usuario en la tabla
+        // Capturar accion del Usuario en la tabla
         this.tabla.addMouseListener(new MouseInputAdapter() {
 
             public void mouseClicked(MouseEvent m) {
@@ -81,23 +81,23 @@ public class UI3 {
                 });
             }
         });
-        //Actualizar Datos
+        // Actualizar Datos
         tabla.getModel().addTableModelListener(new TableModelListener() {
 
             @Override
             public void tableChanged(TableModelEvent e) {
                 int fila = e.getFirstRow();
-                TableModel model = (TableModel)e.getSource();
-                Object[] data = {model.getValueAt(fila, 0), model.getValueAt(fila, 1), model.getValueAt(fila, 2), Integer.parseInt(model.getValueAt(fila, 3).toString()), model.getValueAt(fila, 4)};
+                TableModel model = (TableModel) e.getSource();
+                Object[] data = { model.getValueAt(fila, 0), model.getValueAt(fila, 1), model.getValueAt(fila, 2), Integer.parseInt(model.getValueAt(fila, 3).toString()), model.getValueAt(fila, 4) };
                 dbPrepareStmtMod("update " + tablaSql[key - 1] + " set nombre = ?, alimentacion = ?, total = ?, comportamiento = ? where especie = ?", data);
             }
         });
 
-        //Boton Volver
+        // Boton Volver
         this.volver = new JButton("Volver");
-        this.volver.addActionListener(new ActionListener(){
+        this.volver.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e){
+            public void actionPerformed(ActionEvent e) {
                 UI.view.setContentPane(UI2.getJPanel());
                 UI.view.validate();
                 UI.view.invalidate();
@@ -108,23 +108,25 @@ public class UI3 {
         this.panelBot.add(volver, BorderLayout.SOUTH);
         this.panelBot.add(borrar, BorderLayout.SOUTH);
         this.panelMostrar.add(panelBot, BorderLayout.SOUTH);
-        
+
     }
 
-    public JPanel getJPanel(){
+    public JPanel getJPanel() {
         return this.panelMostrar;
     }
-    //dbStatement que muestra los datos
+
+    // dbStatement que muestra los datos
     public ResultSet dbStatement(String query) {
         try {
             this.stmt = conn.createStatement();
             this.rs = stmt.executeQuery(query);
             while (rs.next()) {
-                modelo.addRow(new Object[] {rs.getString("nombre"), rs.getString("especie"), rs.getString("alimentacion"), rs.getInt("total"), rs.getString("comportamiento")});
+                modelo.addRow(new Object[] { rs.getString("nombre"), rs.getString("especie"),
+                        rs.getString("alimentacion"), rs.getInt("total"), rs.getString("comportamiento") });
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             try {
                 this.stmt.close();
                 this.rs.close();
@@ -133,28 +135,27 @@ public class UI3 {
             }
         }
         return rs;
-    }    
-    //Borrar
+    }
+
+    // Borrar
     public void dbPrepareStmtDel(String query, Object[] obj) {
         try {
             this.pstmt = this.conn.prepareStatement(query);
             this.pstmt.setObject(1, (String) obj[0]);
             this.pstmt.executeUpdate();
-        } 
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
-        } 
-        finally {
+        } finally {
             try {
                 this.pstmt.close();
-            } 
-            catch (SQLException e) {
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
     }
-    //instanciar DB
-    public void DB() { 
+
+    // instanciar DB
+    public void DB() {
         try {
             Class.forName(driverDB);
             this.conn = DriverManager.getConnection(urlDB, userDB, passDB);
@@ -162,7 +163,8 @@ public class UI3 {
             e.printStackTrace();
         }
     }
-    //Modificar
+
+    // Modificar
     public void dbPrepareStmtMod(String query, Object[] obj) {
         try {
             this.pstmt = this.conn.prepareStatement(query);
@@ -172,18 +174,15 @@ public class UI3 {
             this.pstmt.setString(4, (String) obj[4]);
             this.pstmt.setString(5, (String) obj[1]);
             this.pstmt.executeUpdate();
-        } 
-        catch (SQLException event) {
+        } catch (SQLException event) {
             UI.confirmacion.setText("Error: ya existe esa especie");
             UI.confirmacion.setForeground(Color.red);
             UI.confirmacion.setVisible(true);
             event.printStackTrace();
-        } 
-        finally {
+        } finally {
             try {
                 this.pstmt.close();
-            } 
-            catch (SQLException event) {
+            } catch (SQLException event) {
                 event.printStackTrace();
             }
         }
