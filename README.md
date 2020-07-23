@@ -1,8 +1,8 @@
-## ZoologicoProyecto3
-Proyecto #3 de la asiganatura Programación Orientada a Objetos de la `Universidad Rafael Urdaneta`.\
+## ZoologicoProyecto4
+Proyecto #4 de la asiganatura Programación Orientada a Objetos de la `Universidad Rafael Urdaneta`.\
 Realizado por **Gerardo Torres C.I.: 29.869.119**\
 Documentación hecha en [Draw.io](https://app.diagrams.net/)
-
--Añadida base de datos
+**Importante: Main.java es el main del servidor, para evitar conflictos con GitHub se dejó de esta manera**
+-Implementacion de sockets e Hilos
 -Optimizacion de Codigo
--Uso de JTable donde se puede borrar y modificar
+-*Reconoce las tablas de cualquier base de datos que este en Postgre*
