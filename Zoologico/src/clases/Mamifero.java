@@ -13,7 +13,6 @@ public class Mamifero extends Animal{
     public String toString(){
         return "\tTipo: Mamifero" + super.toString() + "\tComportamiento: " + super.getComportamiento();
     }
-
     @Override
     public void mostrar(){
         System.out.println("Nombre: " + getNombre() + "\tEspecie: " + getEspecie()  + "\tSe encuentran: " + getTotal() + "\tAlimentacion: " + getAlimentacion());
