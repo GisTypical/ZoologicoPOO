@@ -85,11 +85,12 @@ public class ClienteApp {
         if (textField.getText().equals("")) {
         } else {
             try {
+                
                 // Enviar el comando
                 socket = new Socket("localhost", 3000);
                 envioStream = new DataOutputStream(socket.getOutputStream());
-
                 envioStream.writeUTF(textField.getText());
+
                 // Recibir lo que manda el servidor
                 recibirStream = new DataInputStream(socket.getInputStream());
                 chat.append("Cliente: " + textField.getText());

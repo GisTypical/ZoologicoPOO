@@ -1,85 +1,97 @@
 package UI;
 
+import UI.ui1.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class UI2 {
-    public static JPanel panelLista;
-    private JButton b1, b2, b3, b4, b5, volver;
+public class UI2 extends JPanel{
 
-    public UI2() {
-        UI2.panelLista = new JPanel(new GridLayout(6, 1));
-        UI2.panelLista.setSize(300, 500);
+    private static final long serialVersionUID = 1L;
+    private JLabel confirmacion;
+    private JButton b1;
+    private JButton b2;
+    private JButton b3;
+    private JButton b4;
+    private JButton b5;
+    private JButton volver;
+
+    public UI2(JFrame ventana) {
+        this.setLayout(new GridLayout(6, 1));
+        this.setSize(300, 500);
         this.b1 = new JButton("Lista Mamiferos");
         this.b1.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                UI3 terceraV;
-                terceraV = new UI3(1);
-                UI.view.setContentPane(terceraV.getJPanel());
-                UI.view.validate();
-                UI.view.invalidate();
+                UI3 ui3;
+                ui3 = new UI3(1, ventana);
+                ventana.setContentPane(ui3.getJPanel());
+                ventana.validate();
+                ventana.invalidate();
             }
         });
         this.b2 = new JButton("Lista Reptiles");
         this.b2.addActionListener(new ActionListener(){
             public void actionPerformed (ActionEvent e){
-                UI3 terceraV;
-                terceraV = new UI3(2);
-                UI.view.setContentPane(terceraV.getJPanel());
-                UI.view.validate();
-                UI.view.invalidate();
+                UI3 ui3;
+                ui3 = new UI3(2, ventana);
+                ventana.setContentPane(ui3.getJPanel());
+                ventana.validate();
+                ventana.invalidate();
             }
         });
         this.b3 = new JButton("Lista Aves");
         this.b3.addActionListener(new ActionListener(){
             public void actionPerformed (ActionEvent e){
-                UI3 terceraV;
-                terceraV = new UI3(3);
-                UI.view.setContentPane(terceraV.getJPanel());
-                UI.view.validate();
-                UI.view.invalidate();
+                UI3 ui3;
+                ui3 = new UI3(3, ventana);
+                ventana.setContentPane(ui3.getJPanel());
+                ventana.validate();
+                ventana.invalidate();
             }
         });
         this.b4 = new JButton("Lista Anfibios");
-        this.b4.addActionListener(new ActionListener(){
-            public void actionPerformed (ActionEvent e){
-                UI3 terceraV;
-                terceraV = new UI3(4);
-                UI.view.setContentPane(terceraV.getJPanel());
-                UI.view.validate();
-                UI.view.invalidate();
+        this.b4.addActionListener((ActionEvent e) -> {
+                UI3 ui3;
+                ui3 = new UI3(4, ventana);
+                ventana.setContentPane(ui3.getJPanel());
+                ventana.validate();
+                ventana.invalidate();
             }
-        });
+        );
         this.b5 = new JButton("Lista Peces");
         this.b5.addActionListener(new ActionListener(){
             public void actionPerformed (ActionEvent e){
-                UI3 terceraV;
-                terceraV = new UI3(5);
-                UI.view.setContentPane(terceraV.getJPanel());
-                UI.view.validate();
-                UI.view.invalidate();
+                UI3 ui3 = new UI3(5, ventana);
+                ventana.setContentPane(ui3.getJPanel());
+                ventana.validate();
+                ventana.invalidate();
             }
         });
         this.volver = new JButton("Volver");
-        UI2.panelLista.add(b1);
-        UI2.panelLista.add(b2);
-        UI2.panelLista.add(b3);
-        UI2.panelLista.add(b4);
-        UI2.panelLista.add(b5);
-        UI2.panelLista.add(volver);
+        this.add(b1);
+        this.add(b2);
+        this.add(b3);
+        this.add(b4);
+        this.add(b5);
+        this.add(volver);
         this.volver.addActionListener(new ActionListener(){
             public void actionPerformed (ActionEvent e){
-                UI.view.setContentPane(UI.getJPanel());
-                UI.view.validate();
-                UI.view.invalidate();
-                UI.confirmacion.setVisible(false);
+                UI ui1 = new UI(ventana);
+                ventana.setContentPane(ui1.getJPanel());
+                ventana.validate();
+                ventana.invalidate();
+                confirmacion.setVisible(false);
             }
         });
-        UI2.panelLista.setPreferredSize(new Dimension(100, 100));
+        this.setPreferredSize(new Dimension(100, 100));
     }
 
-    public static JPanel getJPanel(){
-        return panelLista;
+    public void setConfirmacion(JLabel confirmacion){
+        this.confirmacion = confirmacion;
     }
+
+    public JPanel getJPanel(){
+        return this;
+    }
+
 }
