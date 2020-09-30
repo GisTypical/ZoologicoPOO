@@ -1,12 +1,11 @@
-package UI.ui1;
+package ui.ui1;
 
-import javax.swing.*;
-
-import UI.*;
-import cliente.Hilo;
-import eventos.Insertar;
+import eventos.UIEvent;
+import ui.*;
 import zoo.DB;
 
+import javax.swing.*;
+import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -14,58 +13,52 @@ public class UI extends JPanel {
 
     private static final long serialVersionUID = 1L;
 
-    private JLabel confirmacion;
+    JLabel confirmacion = new JLabel();
+
     private GridBagConstraints cns = new GridBagConstraints();
-    private int key = 1;
 
     public UI(JFrame ventana) {
         this.setLayout(new GridBagLayout());
         paneles(ventana);
-
-        new Hilo();
     }
 
     public void paneles(JFrame ventana) {
-
-        DB.getInstances().setConfirmacion(confirmacion);
-
-        JPanel panel2 = new JPanel();
-        JPanel panel3 = new JPanel();
+        
 
         LeftPanel lP = new LeftPanel();
-        cns.gridx = 0;
-        cns.gridy = 0;
-        cns.gridwidth = 1;
-        cns.gridheight = 2;
-        cns.weightx = 1.0;
-        cns.weighty = 1.0;
-        cns.fill = GridBagConstraints.BOTH;
+        this.setGBCns(0, 0, 1, 2, 1.0, 1.0, GridBagConstraints.BOTH);
         this.add(lP, cns);
-        Insertar ins = new Insertar(lP.getTFN(), lP.getTFE(), lP.getTFA(), lP.getTFT(), lP.getTFC());
+        UIEvent ins = new UIEvent(lP.getTFN(), lP.getTFE(), lP.getTFA(), lP.getTFT(), lP.getTFC());
 
-        // PANEL 2
+        // PANEL TOP RIGHT
+        JPanel topRight = new JPanel();
+        topRight.setLayout(new BoxLayout(topRight, BoxLayout.PAGE_AXIS));
+        Border border = BorderFactory.createEtchedBorder(EtchedBorder.LOWERED);
+        TitledBorder titleBorder = BorderFactory.createTitledBorder(border, "(Datos Animal)");
+        titleBorder.setTitleJustification(TitledBorder.CENTER);
+        topRight.setBorder(titleBorder);
 
-        panel2.setLayout(new BoxLayout(panel2, BoxLayout.PAGE_AXIS));
-
-        ButtonGroup group = new ButtonGroup();
         // Instanciar los JRadioButton
         JRadioButton radioMamifero = new JRadioButton("Mamifero", true);
         JRadioButton radioReptil = new JRadioButton("Reptil");
         JRadioButton radioAve = new JRadioButton("Ave");
         JRadioButton radioAnfibio = new JRadioButton("Anfibio");
         JRadioButton radioPez = new JRadioButton("Pez");
+
         // Agruparlos para solo elegir 1
+        ButtonGroup group = new ButtonGroup();
         group.add(radioMamifero);
         group.add(radioReptil);
         group.add(radioAve);
         group.add(radioAnfibio);
         group.add(radioPez);
+
         // Añadirlos al panel
-        panel2.add(radioMamifero);
-        panel2.add(radioReptil);
-        panel2.add(radioAve);
-        panel2.add(radioAnfibio);
-        panel2.add(radioPez);
+        topRight.add(radioMamifero);
+        topRight.add(radioReptil);
+        topRight.add(radioAve);
+        topRight.add(radioAnfibio);
+        topRight.add(radioPez);
 
         // Añadir acciones a los RadioButtons
         radioMamifero.addActionListener((ActionEvent event) -> ins.setkey(1));
@@ -75,24 +68,22 @@ public class UI extends JPanel {
         radioPez.addActionListener((ActionEvent event) -> ins.setkey(5));
 
         this.confirmacion = new JLabel();
+        DB.getInstances().setConfirmacion(this.confirmacion);
         this.confirmacion.setVisible(false);
-        panel2.add(this.confirmacion);
-        cns.gridx = 1;
-        cns.gridy = 0;
-        cns.gridwidth = 1;
-        cns.gridheight = 1;
-        cns.weightx = 1.0;
-        cns.weighty = 1.0;
+        topRight.add(this.confirmacion);
+        this.setGBCns(1, 0, 1, 1, 1.0, 1.0, GridBagConstraints.BOTH);
         cns.fill = GridBagConstraints.BOTH;
-        this.add(panel2, cns);
+        this.add(topRight, cns);
 
         // PANEL 3
-
-        panel3.setLayout(new BorderLayout());
+        JPanel botRight = new JPanel();
+        botRight.setLayout(new BorderLayout());
         JButton b1 = new JButton("Insertar animal");
         b1.addActionListener(ins);
-        panel3.add(b1, BorderLayout.NORTH);
+        botRight.add(b1, BorderLayout.NORTH);
         JButton b2 = new JButton("Ver listas ->");
+        botRight.setBorder(BorderFactory.createEmptyBorder(10, 50, 10, 50));
+
         b2.addActionListener((ActionEvent event) -> {
             UI2 ui2 = new UI2(ventana);
             ui2.setConfirmacion(this.confirmacion);
@@ -100,15 +91,20 @@ public class UI extends JPanel {
             ventana.validate();
             ventana.invalidate();
         });
-        panel3.add(b2, BorderLayout.CENTER);
-        cns.gridx = 1;
-        cns.gridy = 1;
-        cns.gridwidth = 1;
-        cns.gridheight = 1;
-        cns.weightx = 1.0;
-        cns.weighty = 1.0;
-        cns.fill = GridBagConstraints.BOTH;
-        this.add(panel3, cns);
+
+        botRight.add(b2, BorderLayout.CENTER);
+        this.setGBCns(1, 1, 1, 1, 1.0, 1.0, GridBagConstraints.BOTH);
+        this.add(botRight, cns);
+    }
+
+    private void setGBCns(int cns1, int cns2, int cns3, int cns4, double cns5, double cns6, int cns7) {
+        this.cns.gridx = cns1;
+        this.cns.gridy = cns2;
+        this.cns.gridwidth = cns3;
+        this.cns.gridheight = cns4;
+        this.cns.weightx = cns5;
+        this.cns.weighty = cns6;
+        this.cns.fill = cns7;
     }
 
     // Getters

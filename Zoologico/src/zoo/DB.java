@@ -9,6 +9,7 @@ import java.awt.*;
 
 public class DB {
 
+    // DataBase Things
     private static DB db = new DB();
     private Connection conn;
     private Statement stmt;
@@ -19,9 +20,10 @@ public class DB {
     private String urlDB = "jdbc:postgresql://localhost:5432/" + this.dbName;
     private String userDB = "postgres";
     private String passDB = "123";
+
     private JLabel confirmacion;
     private DefaultTableModel modelo;
-    
+
     public DB() {
         try {
             Class.forName(driverDB);
@@ -34,7 +36,7 @@ public class DB {
     public static DB getInstances() {
         return db;
     }
-    
+
     // dbStatement que muestra los datos
     public ResultSet dbStatement(String query) {
         try {
@@ -61,7 +63,7 @@ public class DB {
     public void dbPrepareStmtDel(String query, Object[] obj) {
         try {
             this.pstmt = this.conn.prepareStatement(query);
-            this.pstmt.setObject(1, (String) obj[0]);
+            this.pstmt.setObject(1, obj[0].toString());
             this.pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -108,8 +110,8 @@ public class DB {
             this.pstmt.setString(5, (String) obj[4]);
             this.pstmt.executeUpdate();
             this.confirmacion.setText("Insertado!");
-            confirmacion.setForeground(Color.orange);
-            confirmacion.setVisible(true);
+            this.confirmacion.setForeground(Color.orange);
+            this.confirmacion.setVisible(true);
         } catch (SQLException event) {
             confirmacion.setText("Error: ya existe esa especie");
             confirmacion.setForeground(Color.red);
@@ -123,13 +125,12 @@ public class DB {
             }
         }
     }
-    
-    public void setModelo(DefaultTableModel modelo){
+
+    public void setModelo(DefaultTableModel modelo) {
         this.modelo = modelo;
     }
 
-    public void setConfirmacion(JLabel confirmacion){
+    public void setConfirmacion(JLabel confirmacion) {
         this.confirmacion = confirmacion;
     }
-
 }

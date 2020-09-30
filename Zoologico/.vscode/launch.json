@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - MainCliente",
+            "request": "launch",
+            "mainClass": "cliente.MainCliente",
+            "projectName": "Zoologico_9649ee77"
+        },
+        {
+            "type": "java",
             "name": "Debug (Launch)",
             "request": "launch",
             "mainClass": "zoo.Main"
@@ -15,7 +22,6 @@
             "name": "Debug (Launch) - Current File",
             "request": "launch",
             "mainClass": "${file}"
-        },
-
+        }
     ]
 }

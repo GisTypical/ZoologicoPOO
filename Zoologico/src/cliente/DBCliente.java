@@ -1,15 +1,11 @@
 package cliente;
 
-import UI.*;
-import UI.ui1.*;
-import java.io.*;
-import java.net.*;
 import java.sql.*;
 import java.util.ArrayList;
-import java.awt.*;
 
 public class DBCliente {
 
+    // Postgre things
     private static DBCliente db = new DBCliente();
     private Connection conn;
     private Statement stmt;
@@ -19,10 +15,12 @@ public class DBCliente {
     private String urlDB = "jdbc:postgresql://localhost:5432/" + this.dbName;
     private String userDB = "postgres";
     private String passDB = "123";
-    private ArrayList<String> tablas;
-    private int cont, i;
-    private String union = "", datos;
 
+    private ArrayList<String> tablas;
+    private int numTabla;
+    private String datos;
+    private String[] partes;
+    private StringBuilder sBDatos = new StringBuilder();
 
     public DBCliente() {
         try {
@@ -38,81 +36,100 @@ public class DBCliente {
     }
 
     // Funcion para buscar y mostrar
-    public ResultSet dbStatementCliente(String query) {
+    public String dbStatementCliente(String query) {
+        this.partes = datos.split(" ");
         try {
             this.stmt = conn.createStatement();
             this.rs = stmt.executeQuery(query);
-            if (cont == 0) {
-                datos = "";
-                cont++;
+            // Si el query no da fallos realiza lo siguiente
+            if (!this.datos.equals("")) {
+                this.datos = "";
+                this.sBDatos.delete(0, this.sBDatos.length());
             }
             while (rs.next()) {
-                datos += "Nombre:\t" + rs.getString("nombre") + "\nEspecie:\t" + rs.getString("especie")
-                        + "\nAlimentacion:\t" + rs.getString("alimentacion") + "\nTotal:\t" + rs.getInt("total")
-                        + "\nComporta.:\t" + rs.getString("comportamiento") + "\n\n";
+                this.sBDatos.append("Nombre:\t" + rs.getString("nombre"));
+                this.sBDatos.append("\nEspecie:\t" + rs.getString("especie"));
+                this.sBDatos.append("\nAlimentacion:\t" + rs.getString("alimentacion"));
+                this.sBDatos.append("\nTotal:\t" + rs.getInt("total"));
+                this.sBDatos.append("\nComporta.:\t" + rs.getString("comportamiento") + "\n\n");
             }
-            try {
-                this.stmt.close();
-                this.rs.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            this.datos = this.sBDatos.toString();
+            this.closeConnection();
         } catch (SQLException e) {
-            String partes[] = datos.split(" ");
-            datos = "Tipo de animal '" + partes[1] + "' es invalido\n";
+            this.datos = TIPOINVALIDO.replace("_", partes[1]);
             e.printStackTrace();
         }
-        return rs;
+        return this.datos;
     }
 
-    public ResultSet dbStatementTodo(String query) {
-        String partes[] = datos.split(" ");
+    public String dbStatementTodo(String query) {
+        this.partes = datos.split(" ");
         try {
             this.stmt = conn.createStatement();
             this.rs = stmt.executeQuery(query);
-            if (cont == 0) {
-                datos = "";
-                cont++;
+            // Si el query no da fallos realiza lo siguiente
+            if (!this.datos.equals("")) {
+                this.datos = "";
             }
-            datos += "-------------------------------" + tablas.get(i).toUpperCase()
-                    + "-------------------------------\n";
+            this.sBDatos.append("-------------------------------");
+            this.sBDatos.append(tablas.get(this.numTabla).toUpperCase());
+            this.sBDatos.append("-------------------------------\n");
             while (rs.next()) {
-                datos += "Nombre:\t" + rs.getString("nombre") + "\nEspecie:\t" + rs.getString("especie")
-                        + "\nAlimentacion:\t" + rs.getString("alimentacion") + "\nTotal:\t" + rs.getInt("total")
-                        + "\nComporta.:\t" + rs.getString("comportamiento") + "\n\n";
+                this.sBDatos.append("Nombre:\t" + rs.getString("nombre"));
+                this.sBDatos.append("\nEspecie:\t" + rs.getString("especie"));
+                this.sBDatos.append("\nAlimentacion:\t" + rs.getString("alimentacion"));
+                this.sBDatos.append("\nTotal:\t" + rs.getInt("total"));
+                this.sBDatos.append("\nComporta.:\t" + rs.getString("comportamiento") + "\n\n");
             }
-            i++;
-            try {
-                this.stmt.close();
-                this.rs.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            this.datos = this.sBDatos.toString();
+            this.numTabla++;
+            this.closeConnection();
         } catch (SQLException e) {
-            datos = "Tipo de animal '" + partes[1] + "' es invalido\n";
+            this.closeConnection();
             e.printStackTrace();
         }
-        return rs;
+        return this.datos;
     }
 
-    public ResultSet dbStatementTablas(String query) {
-        String[] partes = datos.split(" ");
+    public String dbStatementTablas(String query) {
+        this.partes = datos.split(" ");
         try {
             this.stmt = conn.createStatement();
             this.rs = stmt.executeQuery(query);
             while (rs.next()) {
                 tablas.add(rs.getString("table_name"));
             }
-            try {
-                this.stmt.close();
-                this.rs.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            this.closeConnection();
         } catch (SQLException e) {
-            datos = "Tipo de animal '" + partes[1] + "' es invalido\n";
             e.printStackTrace();
         }
-        return rs;
+        return this.datos;
     }
+
+    public void setDatos(String datos) {
+        this.datos = datos;
+    }
+
+    public void setTabla(ArrayList<String> tablas) {
+        this.tablas = tablas;
+    }
+
+    public void clsDatos() {
+        this.sBDatos.delete(0, this.sBDatos.length());
+    }
+
+    public void setNumTabla(int numTabla) {
+        this.numTabla = numTabla;
+    }
+
+    private void closeConnection() {
+        try {
+            this.stmt.close();
+            this.rs.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static final String TIPOINVALIDO = "\t~Tipo de animal '_' no existe~\n";
 }

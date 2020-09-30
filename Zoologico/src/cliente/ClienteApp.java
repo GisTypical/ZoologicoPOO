@@ -1,111 +1,66 @@
 package cliente;
 
 import javax.swing.*;
+
+import eventos.ClientSendEvent;
+
 import java.awt.*;
 import java.awt.event.*;
-import java.io.*;
-import java.net.*;
 
-public class ClienteApp {
-    // Sockets
-    private Socket socket = null;
-    private DataOutputStream envioStream = null;
-    private DataInputStream recibirStream = null;
-    private String datos;
+public class ClienteApp extends JPanel {
+
+    private static final long serialVersionUID = 1L;
     // Componentes Swing
-    private JFrame frame;
-    private JPanel panelGod;
     private JTextArea chat;
     private JTextField textField;
     private JButton enviar;
-    private JScrollPane scroll;
     private GridBagConstraints cns;
 
-    public ClienteApp() {
+    public ClienteApp(JFrame frame) {
 
         this.cns = new GridBagConstraints();
-        this.frame = new JFrame("Zoo AppCliente");
-        this.panelGod = new JPanel(new GridBagLayout());
+        this.setLayout(new GridBagLayout());
         this.chat = new JTextArea();
-        cns.gridx = 0;
-        cns.gridy = 0;
-        cns.gridwidth = 3;
-        cns.gridheight = 2;
-        cns.weightx = 1.0;
-        cns.weighty = 1.0;
-        cns.fill = GridBagConstraints.BOTH;
+        this.gridBagConstraints(0, 0, 3, 2, 1.0, 1.0, GridBagConstraints.BOTH);
         this.chat.setEditable(false);
-        this.scroll = new JScrollPane(chat);
-        this.panelGod.add(scroll, cns);
+        this.add(new JScrollPane(this.chat), this.cns);
         this.textField = new JTextField();
-        cns.gridx = 0;
-        cns.gridy = 2;
-        cns.gridwidth = 2;
-        cns.gridheight = 3;
-        cns.weightx = 1.0;
-        cns.weighty = 0.0;
-        cns.fill = GridBagConstraints.BOTH;
-        this.panelGod.add(textField, cns);
-        this.textField.addActionListener(new ActionListener() {
+        this.gridBagConstraints(0, 2, 2, 3, 1.0, 0.0, GridBagConstraints.BOTH);
+        this.add(this.textField, this.cns);
+        this.textField.addActionListener(new ClientSendEvent(this.textField, this.chat));
 
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Evento();
-            }
-
+        this.enviar = new JButton("Comandos");
+        this.gridBagConstraints(2, 2, 1, 3, 0.0, 0.0, GridBagConstraints.BOTH);
+        this.cns.fill = GridBagConstraints.BOTH;
+        this.enviar.addActionListener((ActionEvent e) -> {
+            new JOptionPane();
+            JOptionPane.showMessageDialog(frame, optionPaneMsg(), "Ayuda", JOptionPane.INFORMATION_MESSAGE);
         });
-
-        this.enviar = new JButton("Ayuda");
-        cns.gridx = 2;
-        cns.gridy = 2;
-        cns.gridwidth = 1;
-        cns.gridheight = 3;
-        cns.weightx = 0.0;
-        cns.weighty = 0.0;
-        cns.fill = GridBagConstraints.BOTH;
-        this.enviar.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new JOptionPane();
-                JOptionPane.showMessageDialog(frame,
-                        "Comandos permitidos:\n/mostrar 'tabla': muestra datos de una tabla o tipo de animal\n/mostrar todo: muestra todos los animales de todas las tablas o tipos\n/buscarE 'tabla' 'especie': busca un animal en una tabla por su especie\n/buscarN 'tabla' 'nombre': buscar animales en una tabla por su nombre\n/buscarA 'tabla' 'alimentacion': buscar animales en una tabla por su alimentacion\n/cls: limpiar el area de texto\nTenga cuidado al buscar, es case sensitive\n",
-                        "Ayuda", JOptionPane.INFORMATION_MESSAGE);
-            }
-        });
-        this.panelGod.add(enviar, cns);
-
-        this.frame.add(panelGod);
-        this.frame.setBounds(150, 100, 550, 500);
-        this.frame.setVisible(true);
-        this.frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        this.add(this.enviar, this.cns);
+        frame.add(this);
     }
 
-    public void Evento() {
-        if (textField.getText().equals("")) {
-        } else {
-            try {
-                
-                // Enviar el comando
-                socket = new Socket("localhost", 3000);
-                envioStream = new DataOutputStream(socket.getOutputStream());
-                envioStream.writeUTF(textField.getText());
+    private void gridBagConstraints(int cns1, int cns2, int cns3, int cns4, double cns5, double cns6, int cns7) {
+        this.cns.gridx = cns1;
+        this.cns.gridy = cns2;
+        this.cns.gridwidth = cns3;
+        this.cns.gridheight = cns4;
+        this.cns.weightx = cns5;
+        this.cns.weighty = cns6;
+        this.cns.fill = cns7;
+    }
 
-                // Recibir lo que manda el servidor
-                recibirStream = new DataInputStream(socket.getInputStream());
-                chat.append("Cliente: " + textField.getText());
-                datos = recibirStream.readUTF();
-                if (datos.equals("/cls")) {
-                    chat.setText("");
-                } else {
-                    chat.append("\nServidor:\n" + datos);
-                }
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            } finally {
-                textField.setText(null);
-            }
-        }
-
+    private String optionPaneMsg() {
+        StringBuilder msg = new StringBuilder();
+        msg.append("Comandos permitidos:\n");
+        msg.append("/mostrar 'tabla': muestra datos de una tabla o tipo de animal\n");
+        msg.append("/mostrar todo: muestra todos los animales de todas las tablas o tipos\n");
+        msg.append("/buscarE 'tabla' 'especie': busca un animal en una tabla por su especie\n");
+        msg.append("/buscarN 'tabla' 'nombre': buscar animales en una tabla por su nombre\n");
+        msg.append("/buscarA 'tabla' 'alimentacion': buscar animales en una tabla por su alimentacion\n");
+        msg.append("/cls: limpiar el area de texto\n");
+        msg.append("/close: cierra el socket\n");
+        msg.append("Tenga cuidado al buscar, es case sensitive\n");
+        return msg.toString();
     }
 }

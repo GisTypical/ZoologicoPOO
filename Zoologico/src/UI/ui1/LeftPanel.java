@@ -1,4 +1,4 @@
-package UI.ui1;
+package ui.ui1;
 
 import javax.swing.*;
 import javax.swing.border.*;
@@ -6,18 +6,16 @@ import javax.swing.border.*;
 public class LeftPanel extends JPanel {
 
     private static final long serialVersionUID = 1L;
-    private static LeftPanel lp = new LeftPanel();
 
     private JTextField textFieldN;
     private JTextField textFieldE;
     private JTextField textFieldA;
     private JTextField textFieldC;
     private JTextField textFieldT;
-    private Border border;
 
     public LeftPanel() {
         this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-        border = BorderFactory.createEtchedBorder(EtchedBorder.LOWERED);
+        Border border = BorderFactory.createEtchedBorder(EtchedBorder.LOWERED);
         TitledBorder titleBorderL = BorderFactory.createTitledBorder(border, "(Datos Animal)");
         titleBorderL.setTitleJustification(TitledBorder.CENTER);
         this.setBorder(titleBorderL);

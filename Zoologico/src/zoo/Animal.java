@@ -5,11 +5,11 @@ import java.util.Scanner;
 import interfaces.AnimalComportamiento;
 
 public abstract class Animal implements AnimalComportamiento {
-    public String nombre;
-    public String especie;
-    public String alimentacion;
-    public String conducta;
-    public int total;
+    private String nombre;
+    private String especie;
+    private String alimentacion;
+    private String conducta;
+    private int total;
 
     Scanner scanear = new Scanner(System.in);
 
@@ -72,6 +72,6 @@ public abstract class Animal implements AnimalComportamiento {
                 + getAlimentacion();
     }
 
-    public abstract void mostrar();
+    public abstract String mostrar();
 
 }
