@@ -30,7 +30,7 @@ public class Hilo implements Runnable {
                 Socket socket = serverSocket.accept();
                 DataInputStream recibirStream = new DataInputStream(socket.getInputStream());
                 this.datos = recibirStream.readUTF();
-                DBCliente.getInstances().setDatos(this.datos);
+                ClientDB.getInstances().setDatos(this.datos);
                 this.partes = this.datos.split(" ");
                 switch (this.partes[0]) {
                     case "/mostrar":
@@ -43,25 +43,27 @@ public class Hilo implements Runnable {
                             this.datos = POCOSARGUMENTOS;
                             break;
                         }
-                        this.datos = DBCliente.getInstances()
+                        this.datos = ClientDB.getInstances()
                                 .dbStatementCliente(SELECT + this.partes[1] + " where especie = '" + union + "'");
                         break;
                     case "/buscarN": // Buscar por Nombre
-                        union = this.datos.substring(this.datos.indexOf(" ", 9) + 1);
+                        this.indexSpc = this.datos.indexOf(" ", 9);
+                        union = this.datos.substring(this.indexSpc + 1);
                         if (this.indexSpc == -1) {
                             this.datos = POCOSARGUMENTOS;
                             break;
                         }
-                        this.datos = DBCliente.getInstances()
+                        this.datos = ClientDB.getInstances()
                                 .dbStatementCliente(SELECT + this.partes[1] + " where nombre = '" + union + "'");
                         break;
-                    case "/buscarA": // Buscar por Alimentacion
-                        union = this.datos.substring(this.datos.indexOf(" ", 9) + 1);
+                    case "/buscarA": // Buscar por Alimentacion 
+                        this.indexSpc = this.datos.indexOf(" ", 9);
+                        union = this.datos.substring(this.indexSpc + 1);
                         if (this.indexSpc == -1) {
                             this.datos = POCOSARGUMENTOS;
                             break;
                         }
-                        this.datos = DBCliente.getInstances()
+                        this.datos = ClientDB.getInstances()
                                 .dbStatementCliente(SELECT + this.partes[1] + " where alimentacion = '" + union + "'");
                         break;
                     case "/cls": // Limpiar el JTextArea
@@ -69,7 +71,7 @@ public class Hilo implements Runnable {
                     case "/close":
                         break;
                     default: // Comando Incorrecto
-                        this.datos = "\t~Comando '" + this.partes[0] + "' es invalido~\n";
+                        this.datos = "\t~Comando '" + this.partes[0] + "' no existe~\n";
                         break;
                 }
                 if (datos.equals("")) {
@@ -91,18 +93,18 @@ public class Hilo implements Runnable {
         if (this.partes[1].equals("todo")) {
             // Mostrar tablas
             ArrayList<String> tablas = new ArrayList<>();
-            DBCliente.getInstances().setTabla(tablas);
+            ClientDB.getInstances().setTabla(tablas);
             // Obtener las tablas para clasificar los resultados
-            DBCliente.getInstances().dbStatementTablas(QUERYTABLAS);
-            DBCliente.getInstances().setNumTabla(0);
-            DBCliente.getInstances().clsDatos();
+            ClientDB.getInstances().dbStatementTablas(QUERYTABLAS);
+            ClientDB.getInstances().setNumTabla(0);
+            ClientDB.getInstances().clsDatos();
             for (int j = 0; j < tablas.size(); j++) {
                 // Mostrar todo con las tablas obtenidas
-                this.datos = DBCliente.getInstances().dbStatementTodo(SELECT + tablas.get(j));
+                this.datos = ClientDB.getInstances().dbStatementTodo(SELECT + tablas.get(j));
             }
         } else {
             // Sino no es mostrar Todo, solo se muestra lo que se necesita
-            this.datos = DBCliente.getInstances().dbStatementCliente(SELECT + this.partes[1]);
+            this.datos = ClientDB.getInstances().dbStatementCliente(SELECT + this.partes[1]);
         }
     }
 

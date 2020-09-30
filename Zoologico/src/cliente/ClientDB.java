@@ -3,10 +3,10 @@ package cliente;
 import java.sql.*;
 import java.util.ArrayList;
 
-public class DBCliente {
+public class ClientDB {
 
     // Postgre things
-    private static DBCliente db = new DBCliente();
+    private static ClientDB db = new ClientDB();
     private Connection conn;
     private Statement stmt;
     private ResultSet rs;
@@ -22,7 +22,7 @@ public class DBCliente {
     private String[] partes;
     private StringBuilder sBDatos = new StringBuilder();
 
-    public DBCliente() {
+    public ClientDB() {
         try {
             Class.forName(driverDB);
             this.conn = DriverManager.getConnection(urlDB, userDB, passDB);
@@ -31,7 +31,7 @@ public class DBCliente {
         }
     }
 
-    public static DBCliente getInstances() {
+    public static ClientDB getInstances() {
         return db;
     }
 

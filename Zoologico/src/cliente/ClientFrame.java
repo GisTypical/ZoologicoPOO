@@ -10,7 +10,7 @@ public class ClientFrame {
 
         this.frame = new JFrame("Zoo AppCliente");
 
-        new ClienteApp(frame);
+        new ClientApp(frame);
 
         this.frame.setBounds(150, 100, 550, 500);
         this.frame.setVisible(true);
